@@ -1,0 +1,80 @@
+# ── Dati ─────────────────────────────────────────────────────────────────────
+# Gli XLSX grezzi non si committano. Il manifest sha256 sì: è ciò che rende
+# verificabile che due esecuzioni partano dagli stessi file grezzi.
+# `data/*` e non `data/`: git non rientra in una directory esclusa, quindi con
+# `data/` la riga di eccezione sotto non avrebbe effetto.
+data/*
+!data/manifest.sha256
+!data/README.md
+# I dati di popolazione sono aperti (Eurostat), pesano 13 KB e vanno versionati:
+# senza, la pipeline non e' eseguibile offline.
+!data/raw
+data/raw/*
+!data/raw/istat
+# Il dataset pulito si pubblica, con l'autorizzazione di ASUGI: la data di
+# nascita e' ridotta all'anno (vedi clean.py). Da qui riparte tutta la pipeline.
+!data/processed
+data/processed/*
+!data/processed/donations.parquet
+
+# ── Output rigenerabili ──────────────────────────────────────────────────────
+reports/*
+!reports/.gitkeep
+
+# ── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+.venv/
+.venv*/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# ── Editor / OS ──────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+.DS_Store
+
+# ── LaTeX ────────────────────────────────────────────────────────────────────
+# Il PDF è un artefatto: si rigenera con `make thesis`. Restano tracciati i
+# soli sorgenti.
+thesis/*.aux
+thesis/*.bbl
+thesis/*.blg
+thesis/*.fdb_latexmk
+thesis/*.fls
+thesis/*.log
+thesis/*.out
+thesis/*.toc
+thesis/proofread/
+# Il PDF compilato invece si versiona: e' il deliverable, e permette di leggere
+# la tesi senza costruire l'immagine LaTeX (`make build-tex`, 2,3 GB).
+
+# Export di compatibilità per la dashboard: rigenerabile con `make export-legacy`,
+# e comunque contiene gli stessi dati non ridistribuibili di data/raw.
+data/FINAL/
+
+# Installer artifacts built locally (Windows exe/rar) - exceed GitHub's 100MB limit, never commit
+shinyapp-1.0.0.exe
+shinyapp-secci-Setup-1.0.0.exe
+shinyapp-secci-Setup-1.0.0.rar
+slides.zip
+
+# Local working files
+/legacy/
+/docs/
+
+# Versioni della tesi che non si pubblicano: firmata, di stampa, file di editor.
+thesis/*-SIGNED.pdf
+thesis/Tesi-grassetto*
+thesis/front/Copertina-grassetto.tex
+thesis/*.synctex.gz
+thesis/#*#
+thesis/back/dediche-integrali.tex
+slides/
+slides.rar
+.claude/
+
+# ── Documentazione ───────────────────────────────────────────────────────────
+# HTML generato da Sphinx: si rigenera con `uv run sphinx-build -b html
+# sphinx sphinx/_build/html`.
+sphinx/_build/

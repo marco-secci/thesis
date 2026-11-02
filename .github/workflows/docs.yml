@@ -1,0 +1,57 @@
+# Builds the Sphinx documentation and publishes it on GitHub Pages.
+#
+# The HTML is never committed: it is rebuilt here on every push to main and
+# uploaded as a Pages artifact. One-time setup on GitHub:
+#   Settings -> Pages -> Build and deployment -> Source: "GitHub Actions".
+# The site is then served at https://<user>.github.io/<repo>/.
+
+name: docs
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:        # manual rebuild from the Actions tab
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time; a newer push replaces a build still running.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+
+      # Same locked environment as on the host. `dev` is needed too: the test
+      # modules are documented, and importing them requires pytest.
+      - name: Install dependencies
+        run: uv sync --frozen --extra dev --extra docs
+
+      # -W turns warnings into errors: a broken docstring fails the build
+      # instead of silently publishing a malformed page.
+      - name: Build HTML
+        run: uv run sphinx-build -W -b html sphinx sphinx/_build/html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: sphinx/_build/html
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

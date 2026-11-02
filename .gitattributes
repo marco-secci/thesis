@@ -1,0 +1,26 @@
+# Fine riga.
+#
+# Il repository e' scritto da una macchina Linux e letto da una Windows, e i
+# file vengono eseguiti dentro container Linux via bind-mount. Senza queste
+# regole succedono due cose sgradevoli: un Makefile con fine riga Windows non
+# gira nel container, e un file riaperto sull'altra macchina produce un diff
+# di tutte le righe anche quando ne e' cambiata una.
+#
+# `text=auto` normalizza a LF nel repository e ripristina il fine riga nativo
+# al checkout: su Windows i .tex e i .md restano CRLF, comodi da aprire con
+# qualunque editor, ma nella storia sono puliti.
+* text=auto
+
+# Eccezioni: questi restano LF anche su Windows, perche' vengono eseguiti
+# dentro un container Linux e un CR di troppo li rompe.
+Makefile     text eol=lf
+Dockerfile   text eol=lf
+*.sh         text eol=lf
+*.py         text eol=lf
+
+# Binari: mai convertiti.
+*.png     binary
+*.pdf     binary
+*.xlsx    binary
+*.parquet binary
+*.ipynb   binary

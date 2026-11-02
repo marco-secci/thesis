@@ -1,0 +1,168 @@
+% !TEX root = Tesi.tex
+              %******************************************%
+              %                                          %
+              % Template standard per la Tesi di Laurea  %
+              %            di Stefano Bianchi            %
+              %                                          %
+              %         versione: 27 marzo 2014          %
+              %                                          %
+              %******************************************%
+
+% Se si vuole stampare su entrambi i lati, porre la dicitura 'twoside'
+% tra i parametri documentclass
+\documentclass[a4paper,11pt,oneside,openany]{book}
+
+\usepackage[english,italian]{babel}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{fancyvrb}
+\usepackage{amsmath}
+\numberwithin{equation}{section}
+\usepackage{hyperref}
+
+\usepackage{geometry}
+\usepackage{textcomp}
+\usepackage{color}
+\usepackage{xspace}
+
+\usepackage{amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\floatname{algorithm}{Algoritmo}
+\renewcommand{\algorithmicrequire}{\textbf{Ingresso:}}
+\renewcommand{\algorithmicensure}{\textbf{Uscita:}}
+\renewcommand{\algorithmicfor}{\textbf{per}}
+\renewcommand{\algorithmicforall}{\textbf{per ogni}}
+\renewcommand{\algorithmicdo}{\textbf{esegui}}
+\renewcommand{\algorithmicend}{\textbf{fine}}
+\renewcommand{\algorithmicif}{\textbf{se}}
+\renewcommand{\algorithmicthen}{\textbf{allora}}
+\renewcommand{\algorithmicreturn}{\textbf{restituisci}}
+\usepackage{paralist}
+\usepackage[inline]{enumitem}
+\usepackage{xcolor}
+\usepackage{array}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codeblue}{rgb}{0,0,225}
+\definecolor{codepurple}{HTML}{C42043}
+\definecolor{backcolour}{HTML}{F2F2F2}
+\definecolor{bookColor}{cmyk}{0,0,0,0.90}
+\color{bookColor}
+
+\makeatletter
+\def\namedlabel#1#2{\begingroup
+   \def\@currentlabel{#2}%
+   \phantomsection\label{#1}\endgroup
+}
+\makeatother
+
+%*******************************************************
+% Impostazioni della singola pagina e della copertina
+%*******************************************************
+\input{settings/Impostazioni}
+
+%*******************************************************
+% Copertina
+%*******************************************************
+% Non modificare questa parte
+\usepackage[some]{background}
+\SetBgScale{1}
+\SetBgContents{
+\includegraphics[scale=1]{img/units.png}}
+\SetBgColor{gray}
+\SetBgAngle{0}
+\SetBgOpacity{0.07}
+% Non modificare questa parte
+
+\input{front/Copertina}
+
+%*******************************************************
+% Dedica
+%*******************************************************
+\input{front/Dedica}
+
+\frontmatter
+
+%*******************************************************
+% Sommario
+%*******************************************************
+\input{front/Sommario}
+\input{front/Abstract}
+
+%*******************************************************
+% Indice
+%*******************************************************
+\tableofcontents
+
+%*******************************************************
+% Introduzione
+%*******************************************************
+% Non modificare questa parte
+\renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{\ #1}}{}}
+% Non modificare questa parte
+
+\input{front/Introduzione}
+
+%*******************************************************
+% Capitoli
+%*******************************************************
+\mainmatter
+
+% Non modificare questa parte
+\renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{\chaptername\ \thechapter.\ #1}}{}}
+% Non modificare questa parte
+
+\input{main/Capitolo1}
+\input{main/Capitolo2}
+\input{main/Capitolo3}
+
+\input{main/Capitolo4}
+
+
+%*******************************************************
+% Capitolo conclusivo
+%*******************************************************
+\input{back/Conclusioni}
+
+% Non modificare questa parte
+\appendix
+\crefalias{chapter}{appendix}
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{part}{Appendici}
+\part*{Appendici}
+\renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{\appendixname\ \thechapter.\ #1}}{}}
+% Non modificare questa parte
+
+\input{back/Appendice1}
+\input{back/Appendice2}
+
+
+\backmatter
+
+%*******************************************************
+% Bibliografia
+%*******************************************************
+%\nocite{*}
+\bibliographystyle{unsrtnat}
+\bibliography{bib/Bibliografia}
+
+%*******************************************************
+% Dedica finale o ringraziamenti
+%*******************************************************
+\input{back/DedicaFinale}
+
+\end{document}

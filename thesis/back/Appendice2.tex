@@ -1,0 +1,182 @@
+% ══════════════════════════════════════════════════════════════════════════════
+%  CAPITOLO — LA DASHBOARD INTERATTIVA
+%  Etichette: ch:dash, sec:dash_ui, sec:dash_diverge,
+%             sec:dash_overdisp, sec:dash_limits
+% ══════════════════════════════════════════════════════════════════════════════
+
+\chapter{Una Dashboard Interattiva per l'Esplorazione dei Dati}
+\label{ch:dash}
+
+I capitoli precedenti hanno prodotto una sequenza di risultati dipendenti da
+intervalli e costanti fisse: una
+distribuzione per età, una curva di retention, una tabella di IRR, una
+proiezione al 2031. Ognuno risponde a una domanda posta \emph{a priori}.
+Questa appendice descrive uno strumento che serve al caso opposto --- rispondere
+a domande impreviste e non considerate: Come si
+distribuiscono le donazioni dentro un singolo mese del 2020, che aspetto ha la
+retention se si sposta la soglia di ``giovane'' da 25 a 30 anni, quanto pesa la
+plasmaferesi nel solo bacino femminile. Sono domande legittime e numerose, ed
+eseguire ogni analisi richiederebbe più tempo e spazio di quanto a disposizione.
+
+Lo strumento è un'applicazione web in \textbf{R} con il framework
+\textbf{Shiny}, che legge lo stesso dataset dei capitoli precedenti e ne
+permette l'interrogazione attraverso otto schede tematiche e quattro filtri
+globali. Non è un risultato statistico e non aggiunge evidenza: ha semplicemente
+il compito di rendere i dati accessibili e leggibili.
+% Ha però prodotto, come sottoprodotto della sua
+% verifica, un'osservazione metodologica che ha finito per cambiare la specifica
+% del \cref{ch:glm}, ed è la ragione principale per cui il capitolo esiste.
+
+% ───────────────────────────────────────────────────────────────────────
+\section{Struttura e criterio di progetto}
+\label{sec:dash_ui}
+
+Quattro filtri globali --- anno, genere, tipologia, fascia d'età --- agiscono su
+tutte le schede, con una sola eccezione motivata: la sotto-scheda sulla
+retention ignora il filtro sull'anno, perché restringere a una singola
+annualità troncherebbe artificialmente ogni misura di fidelizzazione, che è per
+definizione longitudinale.
+
+Le otto schede coprono l'esplorazione descrittiva (\emph{Overview},
+\emph{Univariate}, \emph{Time Series}, \emph{Età}), il livello giornaliero
+(\emph{Calendar Heatmap}), l'ispezione delle righe (\emph{Data Table}), la
+regressione (\emph{Regression}) e le proiezioni (\emph{Forecast}). Il livello
+giornaliero è quello che giustifica meglio lo strumento: renderlo in forma
+stampata richiederebbe 204 figure, una per mese della serie, mentre nella
+dashboard è una scheda sola in cui si naviga. Il gradiente per giorno della
+settimana è immediato --- i venerdì sistematicamente più intensi, le domeniche
+quasi vuote, l'Epifania visibile come singola cella fredda in un lunedì
+altrimenti attivo.
+
+Il criterio di progetto è che \textbf{l'applicazione non calcola nulla a
+runtime}: legge artefatti già prodotti. Le uniche stime calcolate al volo sono
+i modelli della scheda \emph{Regression}, per la ragione discussa nella
+\cref{sec:dash_diverge}.
+
+La scheda \emph{Forecast} legge gli artefatti dell'\cref{ch:forecast}: la
+proiezione annuale del trend smorzato (97\,230 donazioni nel sessennio
+2026--2031), ripartita sui mesi secondo il profilo stagionale storico.
+
+% ───────────────────────────────────────────────────────────────────────
+\section{Dove la dashboard e la tesi divergono}
+\label{sec:dash_diverge}
+
+Un'implementazione indipendente degli stessi calcoli, in un linguaggio diverso
+e con un percorso di aggregazione diverso, è un controllo sui numeri della
+tesi. Dove i due percorsi convergono la fiducia aumenta; dove divergono, la
+divergenza è essa stessa informativa --- e si è rivelata la parte più utile.
+Due schede producono numeri che \emph{non} coincidono con i capitoli
+corrispondenti, e in entrambi i casi la causa non è un errore di calcolo ma una
+diversa definizione dell'oggetto misurato.
+
+\paragraph{Retention: due definizioni di ``donatore giovane''.}
+Il \cref{ch:retention} classifica come giovane chi ha una data di prima
+donazione registrata a un'età fra 18 e 25 anni; la dashboard usa la minima età
+\emph{osservata} nel dataset. Per un donatore la cui carriera precede il 2009 i
+due criteri lo classificano diversamente, e la dashboard include inoltre le
+coorti 2024--2025, che hanno per costruzione una retention osservabile di al
+più un anno o due.
+
+Questa divergenza si è rivelata più significativa di quanto sembrasse: è
+esattamente la distinzione fra prima donazione osservata e ingresso reale che
+la \cref{sec:ret_def} ha poi dovuto affrontare, e che ha portato a rifare le
+curve di sopravvivenza del capitolo. La dashboard non ha risolto il problema
+--- adotta anch'essa una definizione approssimata --- ma renderlo visibile è
+ciò che ha portato a cercarlo.
+
+\paragraph{Regressione: due unità di analisi.}
+La scheda \emph{Regression} stima gli stessi due modelli del \cref{ch:glm} ma
+su una tabella costruita in modo diverso: aggrega preventivamente a una riga
+per donatore e tipologia, contando le donazioni entro l'ambito selezionato dai
+filtri, anziché stimare sul panel donatore-anno con gli anni a zero.
+
+La conseguenza è che i coefficienti non sono direttamente confrontabili, e in un
+caso non lo sono affatto. Con il filtro anno su ``All'' la risposta della
+dashboard è un conteggio \emph{di carriera} anziché annuale, e in assenza di un
+termine di esposizione l'età assorbe gli anni di attività accumulati: l'IRR per
+anno d'età sale a $1{,}041$. Restringendo il filtro a una singola annualità
+scende a $1{,}007$, dello stesso ordine di grandezza del capitolo.
+
+È lo stesso meccanismo diagnosticato nella \cref{sec:glm_effects}: senza un
+controllo per anzianità di carriera, il coefficiente dell'età misura
+l'anzianità. La dashboard lo ha mostrato prima, e in forma più grossolana, di
+quanto il modello del capitolo lo abbia poi quantificato.
+
+% ───────────────────────────────────────────────────────────────────────
+\section{Un risultato collaterale: la sovradispersione dipende dall'unità di analisi}
+\label{sec:dash_overdisp}
+
+La verifica più utile prodotta dalla dashboard riguarda la scelta della
+distribuzione. Confrontando AIC di Poisson e binomiale negativa al variare del
+filtro anno si osserva che su tutti gli anni aggregati la binomiale negativa
+domina nettamente, ma \textbf{su una singola annualità} --- cioè quando la
+risposta è un conteggio annuo non replicato --- il parametro di dispersione
+diverge --- la stima non converge, e $\hat{\theta}$ scappa verso l'infinito ---
+e l'AIC della binomiale negativa diventa \emph{peggiore} di quello della
+Poisson di esattamente due punti, cioè la penalizzazione per il parametro
+aggiuntivo e nient'altro. In altri termini la
+binomiale negativa collassa sulla Poisson, e la sovradispersione sparisce.
+
+\begin{table}[ht]
+\centering
+\caption{Confronto AIC nella scheda \emph{Regression} al variare del filtro
+anno, ricalcolato sul dataset del \cref{ch:data}. Covariate: età, genere,
+tipologia. $\Delta\text{AIC} = \text{AIC}_{\text{Poisson}} -
+\text{AIC}_{\text{NB}}$: positivo favorisce la binomiale negativa.}
+\label{tab:dash_overdisp}
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+\textbf{Filtro anno} & \textbf{$n$} & \textbf{AIC Poisson} & \textbf{AIC NB} &
+\textbf{$\Delta$AIC} & \textbf{$\hat{\theta}$ (NB)} \\
+\midrule
+2015  & 12\,790 & 36\,404{,}4  & 36\,406{,}4  & $-2{,}0$    & diverge \\
+2025  & 10\,607 & 29\,895{,}8  & 29\,897{,}8  & $-2{,}0$    & diverge \\
+Tutti & 52\,163 & 493\,871{,}1 & 289\,645{,}2 & $+204\,226$ & $1{,}40$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+L'osservazione ha sollevato una domanda seria sul \cref{ch:glm}: se la
+sovradispersione su cui poggia la scelta della binomiale negativa sparisce
+appena si guarda un anno alla volta, quella scelta va motivata diversamente.
+
+\textbf{La domanda ha trovato risposta}, ed è riportata nella
+\cref{sec:glm_overdisp}. La sovradispersione che la dashboard misura su tutti
+gli anni viene dall'aggregazione longitudinale --- sommando le donazioni di un
+donatore su tutta la carriera, senza un termine di esposizione, si sommano
+donatori con due anni e donatori con diciassette, e la varianza cresce per una
+ragione puramente contabile. Rimossa questa componente, la Poisson sembra
+adeguata.
+
+Ma la dashboard, guardando un anno alla volta, guarda anche \emph{soltanto i
+donatori attivi in quell'anno}: gli anni a zero non ci sono. È una popolazione
+già selezionata, e la sovradispersione che sparisce sparisce per questo.
+Materializzando gli anni a zero il rapporto varianza/media passa da $1{,}23$ a
+$2{,}45$ e la binomiale negativa torna a dominare con un margine enorme
+(\cref{tab:glm_fit}).
+
+L'appendice si chiude quindi con un esito che vale la pena esplicitare: uno
+strumento costruito per esplorare i dati ha portato a correggere l'unità di
+analisi del modello principale della tesi. È il tipo di ritorno che giustifica
+il costo di un'implementazione indipendente.
+
+% ───────────────────────────────────────────────────────────────────────
+\section{Limiti}
+\label{sec:dash_limits}
+
+L'applicazione non è deployata in nessun ambiente e legge il dataset dal filesystem. 
+Renderla accessibile al DIMT richiederebbe un server e soprattutto una valutazione sulla
+protezione dei dati che qui non è stata fatta: il dataset è pseudonimizzato ma
+resta a livello di singolo evento donazionale, e la scheda \emph{Data Table} ne
+consente l'esportazione integrale. \textbf{Una versione pubblica dovrebbe
+esporre solo aggregati.}
+
+% Sul piano analitico, la scheda \emph{Regression} offre tre covariate e una
+% interazione, mentre la specifica del \cref{ch:glm} ne ha di più: la scheda
+% serve a esplorare la direzione degli effetti, non a riprodurre il modello del
+% capitolo --- il che, come mostra la \cref{sec:dash_overdisp}, non le ha
+% impedito di sollevare una domanda pertinente su quel modello.
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  Fine Capitolo — La Dashboard Interattiva
+% ══════════════════════════════════════════════════════════════════════════════

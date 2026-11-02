@@ -1,0 +1,57 @@
+\begin{otherlanguage}{english}
+\chapter{Abstract}
+
+A transfusion system cannot manufacture what it distributes: blood, plasma
+and platelets depend entirely on donors coming forward voluntarily.
+Knowing who donates, how often and for how many years is therefore an
+operational prerequisite for planning collection.
+This thesis addresses the question with real data:
+the donation records of the \textbf{Interhospital Department of Transfusion
+Medicine (DIMT)} of Trieste and Gorizia, two provinces of Friuli Venezia
+Giulia whose population is older on average than the rest of Italy and whose
+donor associations are particularly well established.
+
+The work starts from 27 Excel files with inconsistent schemas and naming
+conventions and, through a Python pipeline documented at every stage, merges
+them into a single analytical dataset of \textbf{353\,671 donation events}
+from \textbf{43\,299 distinct donors} over \textbf{2009--2025}. Four analyses
+are built on it: a descriptive exploration of the donor population and its
+trends over time, related for the first time to the resident population; a
+retention study by entry cohort; a projection of donation volume to 2031,
+selected through a rolling-origin backtest among seventeen candidate models; and
+a count regression model of individual donation frequency. The results are
+also made explorable in an interactive R Shiny dashboard.
+
+The picture is one of slow, steady contraction. Annual volume falls by
+\textbf{28.1\%} between 2009 and 2025, with most of the decline in the first
+half of the period before it levels off; new entries fall even more; and
+individual intensity --- donations per active donor --- stays between $1.84$
+and $1.97$ across all seventeen years. The system, in other words, did not
+intensify to make up for lower turnover: it shrank and then settled on a
+smaller base, helped in part by falling demand.
+
+Relating donations to the resident population of Trieste and Gorizia separates
+demography from behaviour, and the result is not what one would expect. The
+decline in the population of eligible age explains only \textbf{12.2\%} of the
+contraction; nearly all the rest is a genuine loss of participation, from
+$106.9$ to $80.1$ donations per thousand residents. Nor is the loss where one
+would look for it: relative to population, \textbf{people aged 20--24 have the
+highest donation rate in every year observed}, while the 35--44 age groups
+lose between 36 and 41 per cent. The problem with young donors is not that
+they fail to start --- they account for half of all entries --- but that they
+do not come back: \textbf{40.6\%} never return after their first donation,
+against $33.3\%$ of those who start later, and the decreasing hazard function
+points to a threshold around the third to fifth year at which the habit
+consolidates.
+
+The frequency model shows that the dominant effects are regulatory rather than
+motivational (sex, IRR $0.585$; plasmapheresis, IRR $1.77$: different minimum
+intervals and annual caps) and that, once years of donor career are controlled
+for, \textbf{age has no effect at all}: what sets a frequent donor apart is how
+long they have been donating, not how old they are. Consistently, the
+projections point to about \textbf{97\,200 donations} in total over 2026--2031: a first
+year clearly below 2025, then a contraction of just under one percentage point
+a year, with no expected shift in the mix of donation types. A slow thinning,
+not a break.
+
+\end{otherlanguage}

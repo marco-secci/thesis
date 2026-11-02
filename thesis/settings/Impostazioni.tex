@@ -1,0 +1,32 @@
+\hypersetup{ % Visualizzazione dei collegamenti cliccabili
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+% Imposta l'intestazione delle pagine
+\setlength{\headheight}{13.6pt}    % richiesto da fancyhdr
+\addtolength{\topmargin}{-1.6pt}   % compensa l'aumento di headheight
+\fancyhf{}
+\pagestyle{fancy}
+\lhead{}
+\chead{\leftmark}
+\rhead{}
+\lfoot{}
+\cfoot{}
+\rfoot{\thepage}
+
+\usepackage[square, comma, numbers]{natbib}
+\usepackage{xcolor}
+
+\setlength{\parindent}{0pt}
+\usepackage[italian]{cleveref}
+\crefname{algorithm}{algoritmo}{algoritmi}
+\Crefname{algorithm}{Algoritmo}{Algoritmi}
+\usepackage{verbatim}
+\usepackage{amsmath}
+
+% Note a margine per bozza (usato come TODO nel testo)
+\newcommand{\mnote}[1]{\marginpar{\footnotesize\color{red} #1}}

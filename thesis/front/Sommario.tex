@@ -1,0 +1,60 @@
+\chapter{Sommario}
+
+Il sistema trasfusionale non può produrre ciò che distribuisce: sangue, plasma
+e piastrine dipendono per intero dalla disponibilità volontaria dei donatori.
+Capire chi dona, con quale frequenza e per quanti anni continua a farlo è
+quindi una premessa operativa alla programmazione della raccolta.
+Questa tesi affronta la domanda su dati reali:
+l'archivio donazionale del \textbf{Dipartimento Interaziendale di Medicina
+Trasfusionale (DIMT)} di Trieste e Gorizia, due province del Friuli Venezia
+Giulia con popolazione mediamente più anziana del resto del Paese e una rete
+associativa particolarmente radicata.
+
+Il lavoro parte da 27 file Excel eterogenei per schema e convenzioni di
+denominazione e li riconduce, attraverso una pipeline in Python documentata in
+ogni suo stadio, a un unico dataset analitico di \textbf{353\,671 eventi di
+donazione} riferiti a \textbf{43\,299 donatori distinti} nel periodo
+\textbf{2009--2025}. Su questa base sono condotte quattro analisi:
+un'esplorazione descrittiva della popolazione donante e delle sue tendenze
+temporali, rapportate per la prima volta alla popolazione residente; uno studio
+di fidelizzazione condotto per coorte di ingresso; una proiezione del volume
+donazionale al 2031 selezionata con un backtest a origine mobile fra diciassette
+modelli candidati; e un modello di regressione per dati di conteggio sulla
+frequenza donazionale individuale. I risultati sono infine resi ispezionabili
+in una dashboard interattiva in R Shiny.
+
+Il quadro che emerge è quello di un sistema in contrazione lenta e continua. Il
+volume annuale cala del \textbf{28{,}1\%} fra il 2009 e il 2025, concentrando
+la flessione nella prima metà del periodo per poi assestarsi; i nuovi ingressi
+calano di più; e l'intensità individuale --- il numero di donazioni per
+donatore attivo --- resta invariata fra $1{,}84$ e $1{,}97$ lungo tutti e
+diciassette gli anni. Il sistema, cioè, non si è intensificato per compensare
+il minor ricambio: si è ridotto e poi assestato su una base più piccola, anche grazie
+al calo dei consumi.
+
+Rapportare le donazioni alla popolazione residente di Trieste e Gorizia separa
+ciò che è demografia da ciò che è comportamento, e il risultato non è quello
+che ci si aspetterebbe. Il calo della popolazione in età donabile spiega solo
+il \textbf{12{,}2\%} della contrazione; quasi tutto il resto è perdita di
+partecipazione vera, da $106{,}9$ a $80{,}1$ donazioni ogni mille residenti. E
+la perdita non è dove la
+si cercherebbe: a parità di popolazione i \textbf{20--24enni sono la fascia con
+il tasso di donazione più alto in ogni anno osservato}, mentre le fasce 35--44
+perdono fra il 36 e il 41 per cento. Il problema dei giovani non è che non
+cominciano --- sono la metà di tutti gli ingressi --- ma che non tornano: il
+\textbf{40{,}6\%} non si ripresenta dopo la prima donazione, contro il
+$33{,}3\%$ di chi entra più tardi, e la funzione di rischio decrescente
+individua una soglia di consolidamento dell'abitudine intorno al terzo--quinto
+anno.
+
+Il modello di frequenza mostra che gli effetti dominanti sono di natura
+regolamentare più che motivazionale (genere, IRR $0{,}585$; plasmaferesi, IRR
+$1{,}77$: intervalli minimi e tetti annui differenziati) e che, controllando
+per gli anni di carriera, \textbf{l'età anagrafica non ha alcun effetto}: ciò
+che distingue un donatore assiduo è da quanto tempo dona, non quanti anni ha.
+Coerentemente, le proiezioni indicano per il sessennio 2026--2031 circa
+\textbf{97\,200 donazioni} complessive: un primo anno sensibilmente sotto il
+2025, poi una contrazione di poco meno di un punto percentuale l'anno, senza
+ricomposizione attesa fra tipologie. Un assottigliamento lento, non una
+rottura.
+
