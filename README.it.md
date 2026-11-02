@@ -11,6 +11,9 @@ figure della tesi.
 > Marco Secci, Laurea Triennale in Intelligenza Artificiale e Data Analytics, Università degli Studi di Trieste, A.A. 2025/2026
 > Relatore: Leonardo Egidi · Correlatore: Massimo La Raja
 
+> **Documentazione del codice (in inglese):** [marco-secci.github.io/thesis](https://marco-secci.github.io/thesis/)
+> (tutti i moduli e le funzioni della pipeline, generata dal codice con Sphinx)
+
 ## Indice
 
 - [Cosa contiene il repository](#cosa-contiene-il-repository)
@@ -171,6 +174,11 @@ un passo fallisce, lo script mostra la fine del log e indica come ripartire.
 - **Container.** Il `Makefile` esegue gli stessi passi dentro podman
   (rootless) o Docker: `make build`, poi `make all` (`make ENGINE=docker all`
   per Docker). `make help` elenca tutti i target.
+- **Documentazione del codice.** Viene rigenerata e pubblicata automaticamente
+  a ogni push su `main`. Per generarla in locale:
+  `uv sync --extra dev --extra docs`, poi
+  `uv run sphinx-build -b html sphinx sphinx/_build/html` e aprire
+  `sphinx/_build/html/index.html`.
 
 ## La dashboard Shiny (v0.1.0, demo)
 

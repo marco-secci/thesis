@@ -12,6 +12,9 @@ thesis.
 > Marco Secci, BSc in Artificial Intelligence and Data Analytics, University of Trieste, A.Y. 2025/2026
 > Supervisor: Leonardo Egidi · Co-supervisor: Massimo La Raja
 
+> **Code documentation:** [marco-secci.github.io/thesis](https://marco-secci.github.io/thesis/)
+> (every module and function of the pipeline, generated from the source with Sphinx)
+
 ## Contents
 
 - [What this repository contains](#what-this-repository-contains)
@@ -170,6 +173,10 @@ the script prints the end of that log and tells you how to resume.
 - **Containers.** The `Makefile` runs the same steps inside podman (rootless)
   or Docker: `make build`, then `make all` (`make ENGINE=docker all` for
   Docker). `make help` lists every target.
+- **API documentation.** It is rebuilt and published automatically on every
+  push to `main`. To build it locally: `uv sync --extra dev --extra docs`, then
+  `uv run sphinx-build -b html sphinx sphinx/_build/html` and open
+  `sphinx/_build/html/index.html`.
 
 ## The Shiny dashboard (v0.1.0, demo)
 
